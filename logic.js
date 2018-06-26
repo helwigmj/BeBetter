@@ -9,18 +9,11 @@ $(document).ready(function () {
 });
 
 
-
-
-
-
+// Function to add chosen event to footer
 $('.add-event').on('click', function () {
   var modal2content = $('#modal2content').addClass('collection-item');
-
-
-
-
   $('#events').append(modal2content);
-
+  getEvents();
 });
 
 
@@ -48,9 +41,9 @@ var checkPassword
 var password
 var passwordConfrim
 
+// Function to check user input in form 
 $(".modal-close").on("click", function () {
   event.preventDefault();
-
   zipCode = $("#zipcode").val().trim();
   checkUsername = $("#login-username").val().trim();
   checkPassword = $("#login-password").val().trim();
@@ -81,7 +74,6 @@ $(".modal-close").on("click", function () {
 });
 
 $("#reg-button").on("click", function () {
-
   // Don't refresh the page!
   event.preventDefault();
 
@@ -96,17 +88,11 @@ $("#reg-button").on("click", function () {
     database.ref().child("users").child(username).set({ email: email, password: password, name: firstName + " " + lastName, dateAdded: firebase.database.ServerValue.TIMESTAMP, })
     database.ref("users").child(username).once("value").then(function (snapshot) {
       console.log(snapshot.val().username)
-
-
-    });
-
-
+    })
     alert("Registration complete! Please login to play!");
   } else {
     alert("Passwords do not match. Please try again");
   }
-
-  
 });
 
 
@@ -130,11 +116,8 @@ function getWeather() {
     console.log(todayWeatherdesc, todayWeathertemp, todayWeatherwind)
 
     $(".weather-temp").text("Temp (f): " + todayWeathertemp + '\xB0');
-
     $(".weather-desc").text("Description: " + todayWeatherdesc);
-
     $(".weather-wind").text("Wind: " + todayWeatherwind);
-
 
     if (todayWeathertemp < 40) {
       $(".nav-wrapper").css("background", "#1CA79A");
@@ -142,10 +125,7 @@ function getWeather() {
     else {
       $(".nav-wrapper").css("background", "#FFC719");
       $(".page-footer").css("background", "#FFC719");
-
     }
-
-
   });
 }
 
@@ -179,8 +159,7 @@ function getEvents() {
         console.log(response)
 
       });
-      var eventDiv = $("<div>").addClass('event-item')
-
+      var eventDiv = $("<div>").addClass('event-item');
       var eventTitle = $("<span>").text(newResponse.events.event[i].title).addClass('event-title').append('</br>');
       eventDiv.append(eventTitle);
       var eventDescription = $("<span>").html(newResponse.events.event[i].description).addClass('event-description');
@@ -192,8 +171,10 @@ function getEvents() {
       eventButton.attr("class=btn-hidden modal-trigger")
       eventButton.attr("data-event-id", i)
       eventButton.on("click", function () {
+        var id = $(this).attr("data-event-id");
+        console.log(id)
         $('#modal2').modal('open')
-        var id = $(this).attr("data-event-id")
+        
         $("#modal-event-title").text(newResponse.events.event[id].title)
         // $("#modal-event-image").attr("src", newResponse.events.event[id].image)
         $("#modal-event-description").html(newResponse.events.event[id].description)
